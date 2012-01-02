@@ -1,3 +1,7 @@
+
+/* dedicated to the public domain
+ * dongre.avinash@gmail.com
+ */
 #include <iostream>
 #include <map>
 #include <string>

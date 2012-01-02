@@ -1,3 +1,6 @@
+/* dedicated to the public domain
+ * dongre.avinash@gmail.com
+ */
 #include <iostream>
 #include <vector>
 #include <algorithm>
