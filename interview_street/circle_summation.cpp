@@ -8,6 +8,10 @@
 #include <algorithm>
 #include <iterator>
 
+/* Slower version
+ * Logically correct, but need to optimize further
+ */
+
 int main ( int argc, char **argv) {
     int T; // number of test cases
     std::cin >> T;
