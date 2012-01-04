@@ -3,56 +3,32 @@
 *     dongre.avinash@gmail.com          *
 * * * * * * * * * * * * * * * * * * * * */
 
-/* suffix array approach.
- * Still not accepted by BOT.
- */
-
-
 #include <iostream>
 #include <string>
-#include <algorithm>
-#include <string.h>
-#include <vector>
 
-std::string str;
-size_t len;
-
-struct Comp {
-    const char* str;
-    Comp(const char* str): str(str) {}
-    bool operator()(size_t s1, size_t s2) const {
-        return strcmp(str+s1, str+s2) < 0;
-    }
-};
-
-size_t lcp(size_t t) {
-    for (size_t i = 0; i < len - t; i++) {
-        if (str[i] != str[i + t]) 
-            return i;
-    }
-    return len - t;
-}
-int main(int argc, char **argv) {
+int main ( int argc, char **argv) {
     size_t T;
     std::cin >> T;
-    for ( size_t i = 0; i < T; i++) { 
-        std::cin >> str;
-        std::vector<size_t> SA;
-        len = str.size();
-        /* build Suffix array */
-        SA.resize(len + 1);
-        for (size_t i = 0; i < len + 1; ++i) { 
-            SA[i] = i; 
+    char input[100000];
+    for ( size_t i = 0; i < T; i++) {
+        std::cin >> input;
+        size_t len    = strlen(input);
+        char *left    = input;
+        char *right   = input + len - 1;
+        int sol       = 0;
+        int end_count = 1;
+        while ( left < right ) {
+            if ( *right != '\0') {
+                if ( *left == *right ) {
+                    sol++;
+                    left++;right++;
+                    continue;
+                }
+            }
+            end_count++;
+            left = input;
+            right = input + len - end_count;
         }
-        std::sort(SA.begin(), SA.end(), Comp(str.c_str()));
-
-        size_t total = 0;
-        for ( std::vector<size_t>::iterator it = SA.begin(); it != SA.end(); ++it) {
-            if (*it == 0 ) 
-                break;
-            total += lcp(*it);
-        }
-        std::cout << total + len << std::endl;
+        std::cout << sol + len << std::endl;
     }
-    return 0;
 }
