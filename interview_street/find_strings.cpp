@@ -1,39 +1,55 @@
 #include <iostream>
+#include <string.h>
+#include <vector>
 #include <string>
 #include <algorithm>
-#include <vector>
 
-std::vector<std::string> S;
+char txt[2000], *p[2000];
+int m, n;
+
+std::vector<std::string> V;
+
+int cmp(const void *p, const void *q) {
+    int rc = memcmp(*(char **)p, *(char **)q, m);
+    return rc;
+}
 void solve() {
     size_t Qi = 0;
     std::cin >> Qi;
 
-    if ( S.size() < Qi - 1 ) {
+    if ( V.size() < Qi - 1 ) {
         std::cout << "INVALID" << std::endl;
     } else {
-        std::cout << S[Qi - 1] << std::endl;
+        std::cout << V[Qi - 1] << std::endl;
     }
 }
-int main ( int argc, char **argv ) {
-    int n;
-    std::cin >> n;
-    for ( int i = 0; i < n ; i++){
-        std::string str;
-        std::cin >> str;       
 
-        for (unsigned int mask = 1; mask < (1 << str.size()); ++mask) {
-            std::string::const_iterator it = str.begin();
-            std::string sub_str;
-            for (unsigned int m = mask; m; (m>>=1), ++it) {      
-                if (m & 1) {
-                    sub_str.push_back(*it);
+int main() {
+    int N;
+    std::cin >> N;
+    int i;
+    for ( int idx = 0; idx < N ; idx++) {
+        m = 0; n = 0;
+        std::cin >> txt;
+        n = strlen(txt);
+        int k;
+        for (m = 1; m <= n; m++) {
+            for (k = 0; k+m <= n; k++)
+                p[k] = txt+k;
+            qsort(p, k, sizeof(p[0]), &cmp);
+            for (i = 0; i < k; i++) {
+                if (i != 0 && cmp(&p[i-1], &p[i]) == 0){
+                    continue;
                 }
+                char cur_txt[2000];
+                memcpy(cur_txt, p[i],m);
+                cur_txt[m] = '\0';
+                V.push_back(cur_txt);
             }
-            S.push_back(sub_str);
         }
     }
-    std::sort(S.begin(), S.end());
-    S.erase(std::unique(S.begin(), S.end()), S.end());
+    std::sort(V.begin(), V.end());
+    V.erase(std::unique(V.begin(), V.end()), V.end());
     int q;
     std::cin >> q;
     for ( int i = 0; i < q; i++) {
