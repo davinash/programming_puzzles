@@ -1,60 +1,71 @@
-#include <iostream>
-#include <string.h>
-#include <vector>
 #include <string>
-#include <algorithm>
+#include <iostream>
+#include <vector>
 
-char txt[2000], *p[2000];
-int m, n;
+const int ALPHABET_SIZE = 26;
 
-std::vector<std::string> V;
-
-int cmp(const void *p, const void *q) {
-    int rc = memcmp(*(char **)p, *(char **)q, m);
-    return rc;
-}
-void solve() {
-    size_t Qi = 0;
-    std::cin >> Qi;
-
-    if ( V.size() < Qi - 1 ) {
-        std::cout << "INVALID" << std::endl;
-    } else {
-        std::cout << V[Qi - 1] << std::endl;
+struct trie_node_t { 
+    trie_node_t*child_list[ALPHABET_SIZE]; 
+    trie_node_t() {
+        for(int index = 0; index < ALPHABET_SIZE; index++)
+            child_list[index] = (trie_node_t*)0;
     }
-}
+};
 
-int main() {
-    int N;
-    std::cin >> N;
-    int i;
-    for ( int idx = 0; idx < N ; idx++) {
-        m = 0; n = 0;
-        std::cin >> txt;
-        n = strlen(txt);
-        int k;
-        for (m = 1; m <= n; m++) {
-            for (k = 0; k+m <= n; k++)
-                p[k] = txt+k;
-            qsort(p, k, sizeof(p[0]), &cmp);
-            for (i = 0; i < k; i++) {
-                if (i != 0 && cmp(&p[i-1], &p[i]) == 0){
-                    continue;
-                }
-                char cur_txt[2000];
-                memcpy(cur_txt, p[i],m);
-                cur_txt[m] = '\0';
-                V.push_back(cur_txt);
+class Trie {
+public:
+    Trie():m_root(new trie_node_t) {
+    }
+    ~Trie() {
+        _delete(m_root);
+    }
+    void insert(const std::string& s) {
+        int lcv, index; 
+        trie_node_t* t = m_root;
+        for(lcv = 0; lcv < s.length(); lcv++) {
+            index = s[lcv] - 'a';
+            if (t->child_list[index] == (trie_node_t*)0) {
+                t->child_list[index] = new trie_node_t;
             }
+            t = t->child_list[index];
         }
     }
-    std::sort(V.begin(), V.end());
-    V.erase(std::unique(V.begin(), V.end()), V.end());
-    int q;
-    std::cin >> q;
-    for ( int i = 0; i < q; i++) {
-        solve();
+
+    void iterate() {
+        _iterate(m_root, " ");
     }
 
-    return 0;
+    void _iterate(trie_node_t *t, std::string prefix) {        
+        for (int i = 0; i < ALPHABET_SIZE; i++) {
+            if (t->child_list[i] != (trie_node_t*)0) {
+                std::cout << prefix << std::endl;
+                prefix += 'a' + i;
+                _iterate(t->child_list[i], prefix);
+            }   
+        }
+    }   
+private: 
+    int node_count;
+    trie_node_t* m_root;
+
+    void _delete (trie_node_t* t) {
+        int index; 
+        if (t != (trie_node_t*)0) {
+            for(index = 0; index < ALPHABET_SIZE; index++)
+                _delete(t->child_list[index]);
+            delete t;
+        }
+    }    
+};
+
+int main ( int argc, char** argv) {
+    int N;
+    std::cin >> N;
+    Trie *pTrie =  new Trie();
+    while ( N--) {
+        std::string txt;
+        std::cin >> txt;
+        pTrie->insert(txt);
+    }
+    pTrie->iterate();
 }
