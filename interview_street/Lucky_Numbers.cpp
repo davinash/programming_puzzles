@@ -1,21 +1,15 @@
 #include <iostream>
-#include <string>
-#include <numeric>
-/* trying with brute force approach */
-void sum_of_digits_and_square(long long input, long long& sum, long long& sum_square) {
-	sum = sum_square = 0L;
-	while (input != 0L) {
-		long long digit = input % 10L;
-		sum        += digit;
-		sum_square += digit * digit;
-		input /= 10L;
-	}	
-}
-bool isPrime(long long x) {
-	long long max = static_cast <long long> (x);
-	if (x <= 0 || x == 1 || (x % 2 == 0 && x != 2)) return false;
-	for (long long i = 3; i < max; i += 2)
-		if (x % i == 0)
+#include <cmath>
+
+bool isPrime(long long number) {
+	if (number == 1L)
+		return false;
+	if (number == 2L)
+		return true;
+	if((number & 1) == 0)
+		return false;
+	for (long long  d = 3L; d <= (long long)sqrt((double)number); d += 2)
+		if (number % d == 0)
 			return false;
 	return true;
 }
@@ -28,11 +22,12 @@ int main ( int argc, char** argv) {
 		long long A;
 		long long B;
 		std::cin >> A >> B;
-		for ( long long i = A; i <= B; i++) {
+		for ( register long long i = A; i <= B; ++i) {
 			long long sum        = 0;
 			long long sum_square = 0;
-			sum_of_digits_and_square(i,sum,sum_square);
+			for (register long long  n = i; n > 0; sum += n % 10, n /= 10) ;
 			if ( isPrime(sum)) {
+				for (register long long  n = i; n > 0; sum_square += (n % 10) * (n % 10), n /= 10) ;
 				if ( isPrime(sum_square)){
 					result++;
 				}
