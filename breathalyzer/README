@@ -1,0 +1,7 @@
+Breathalyzer
+To safeguard against the dreaded phenomenon of wall posting while drunk, Facebook is implementing a feature that detects when post content is too garbled to have been done while sober and informs the user that they need to take an online breathalyzer test before being allowed to post.
+
+Unfortunately, there is far too much content for a given set of persons to evaluate by hand. Fortunately, you are a programmer of some repute and can write a program that processes and evaluates wall posts. You realize that such a program would be of great use to society and intend to resolve the problem once and for all. The program you write must compute a score for a body of text, returning this score upon completion.
+
+Your program will be given a list of accepted words and run on one wall post at a time. For each word W in the post, you must find word W' from the list of accepted words such that the number of changes from W to W' is minimized. It is possible that W is already W' and thus the number of changes necessary is zero. A change is defined as replacing a single letter with another letter, adding a letter in any position, or removing a letter from any position. The total score for the wall post is the minimum number of changes necessary to make all words in the post acceptable. 
+More details : http://www.facebook.com/careers/puzzles.php?puzzle_id=17
